@@ -3,15 +3,17 @@ pipeline {
     stages {
         stage('SonarQube analysis'){
             steps{
-                echo 'SonarQube analysis ${GIT_BRANCH}'
-                withSonarQubeEnv() { sh 'mvn org.sonarsource.scanner.maven:sonar-maven-plugin:4.7.0.2747:sonar'}
+                echo 'SonarQube analysis'
+                withSonarQubeEnv('MySonarQubeServer') {
+                    sh './mvnw clean package sonar:sonar'
+                }                
             }
             post {
                 success {
-                    echo 'Build Success'
+                    echo 'SonarQube analysis Success'
                 }
                 failure {
-                    echo 'Build Failed'
+                    echo 'SonarQube analysis Failed'
                 }
             }
         }
